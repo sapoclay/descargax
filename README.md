@@ -38,6 +38,8 @@ Las siguientes dependencias deben estar instaladas (salvo la primera, el resto s
 
 ## Funcionalidades
 
+<img width="1298" height="701" alt="descargax-funcionando" src="https://github.com/user-attachments/assets/bff825da-6e91-468d-bea1-86cc4bf63c02" />
+
 - Descarga de videos e imágenes de X.com pegando una o varias URLs (una por línea).
 - Selección de carpeta de destino para las descargas.
 - Historial de descargas y opción para re-descargar desde el historial.
