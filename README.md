@@ -34,6 +34,9 @@ Las siguientes dependencias deben estar instaladas (salvo la primera, el resto s
    ```bash
    python3 run_app.py
    ```
+
+<img width="1900" height="954" alt="descargax-ejecucion-terminal" src="https://github.com/user-attachments/assets/b6b6aaa1-7771-4a37-8c2b-6e9b2f197fb3" />
+
    Esto creará un entorno virtual, instalará las dependencias y lanzará la aplicación.
 
 ## Funcionalidades
