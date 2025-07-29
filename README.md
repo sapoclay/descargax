@@ -1,5 +1,7 @@
 # DescargaX
 
+<img width="1024" height="1024" alt="logo" src="https://github.com/user-attachments/assets/1fe9d968-3ed9-46e0-9db8-18e3a16cbbc5" />
+
 DescargaX es una aplicación de escritorio para descargar contenido multimedia de X.com (antes Twitter) de forma sencilla y visual.
 
 ## Requisitos
