@@ -1,0 +1,5 @@
+yt-dlp
+plyer
+ttkbootstrap
+Pillow
+pystray
