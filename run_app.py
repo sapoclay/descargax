@@ -46,7 +46,7 @@ def install_requirements():
 
 def run_main_app():
     python_exe = get_python_executable()
-    main_file = 'x_downloader.py'
+    main_file = 'descargax.py'
     if not os.path.exists(main_file):
         console.print(f"[red]Error: {main_file} no encontrado")
         sys.exit(1)

@@ -10,11 +10,12 @@ from plyer import notification
 from datetime import datetime
 import subprocess
 import sys
+from about import show_about
 
 CONFIG_FILE = "config.json"
 HISTORIAL_FILE = "historial.txt"
 
-class XDownloaderApp:
+class DescargaXApp:
     def __init__(self, root):
         self.root = root
         self.config = self.load_config()
@@ -22,7 +23,7 @@ class XDownloaderApp:
         self.style = tb.Style(theme=self.theme)
         self.root = root
 
-        root.title("XDownloader - Modern GUI")
+        root.title("DescargaX - Modern GUI")
         root.geometry("900x600")
         root.resizable(True, True)
         root.columnconfigure(0, weight=1)
@@ -31,71 +32,30 @@ class XDownloaderApp:
         self.create_widgets()
 
     def create_widgets(self):
-        # Entrada de URLs
         self.url_label = tb.Label(self.root, text="Pega una o varias URLs de X.com (una por línea):")
         self.url_label.grid(row=0, column=0, sticky="w", padx=10, pady=(10, 0))
 
         self.url_textbox = ScrolledText(self.root, height=7, autohide=True)
         self.url_textbox.grid(row=1, column=0, sticky="nsew", padx=10, pady=5)
-        
+        self.add_context_menu(self.url_textbox.text)
+
         self.url_textbox.text.bind("<Control-a>", lambda e: (self.url_textbox.text.tag_add("sel", "1.0", "end"), "break"))
         self.url_textbox.text.bind("<Control-A>", lambda e: (self.url_textbox.text.tag_add("sel", "1.0", "end"), "break"))
         self.url_textbox.text.bind("<Control-x>", lambda e: self.url_textbox.text.event_generate("<<Cut>>"))
         self.url_textbox.text.bind("<Control-X>", lambda e: self.url_textbox.text.event_generate("<<Cut>>"))
 
-
-        # Botones
         button_frame = tb.Frame(self.root)
         button_frame.grid(row=2, column=0, sticky="ew", padx=10, pady=5)
-        button_frame.columnconfigure((0, 1, 2, 3, 4, 5), weight=1)
+        button_frame.columnconfigure((0, 1, 2, 3, 4, 5, 6), weight=1)
 
-        tb.Button(button_frame, text="Descargar", bootstyle="primary", command=self.start_download_thread).grid(row=0, column=0, sticky="ew", padx=5)
-        tb.Button(button_frame, text="Carpeta destino", bootstyle="info", command=self.change_folder).grid(row=0, column=1, sticky="ew", padx=5)
-        tb.Button(button_frame, text="Historial", bootstyle="secondary", command=self.show_history).grid(row=0, column=2, sticky="ew", padx=5)
-        tb.Button(button_frame, text="Borrar historial", bootstyle="danger", command=self.clear_history).grid(row=0, column=3, sticky="ew", padx=5)
-        tb.Button(button_frame, text="Tema Claro/Oscuro", bootstyle="warning", command=self.toggle_theme).grid(row=0, column=4, sticky="ew", padx=5)
-        tb.Button(button_frame, text="About", bootstyle="success", command=self.show_about).grid(row=0, column=5, sticky="ew", padx=5)
-        tb.Button(button_frame, text="Salir", bootstyle="light", command=self.root.quit).grid(row=0, column=6, sticky="ew", padx=5)
-    def show_about(self):
-        import webbrowser
-        from PIL import Image, ImageTk
-        about_win = tb.Toplevel(self.root)
-        about_win.title("Acerca de XDownloader")
-        about_win.geometry("400x500")
-        about_win.resizable(False, False)
-        about_win.columnconfigure(0, weight=1)
-        about_win.rowconfigure(0, weight=1)
+        tb.Button(button_frame, text="Descargar", bootstyle=PRIMARY, command=self.start_download_thread).grid(row=0, column=0, sticky="ew", padx=5)
+        tb.Button(button_frame, text="Carpeta destino", bootstyle=INFO, command=self.change_folder).grid(row=0, column=1, sticky="ew", padx=5)
+        tb.Button(button_frame, text="Historial", bootstyle=SECONDARY, command=self.show_history).grid(row=0, column=2, sticky="ew", padx=5)
+        tb.Button(button_frame, text="Borrar historial", bootstyle=DANGER, command=self.clear_history).grid(row=0, column=3, sticky="ew", padx=5)
+        tb.Button(button_frame, text="Tema Claro/Oscuro", bootstyle=WARNING, command=self.toggle_theme).grid(row=0, column=4, sticky="ew", padx=5)
+        tb.Button(button_frame, text="Acerca de", bootstyle=SUCCESS, command=lambda: show_about(self.root)).grid(row=0, column=5, sticky="ew", padx=5)
+        tb.Button(button_frame, text="Salir", bootstyle=LIGHT, command=self.root.quit).grid(row=0, column=6, sticky="ew", padx=5)
 
-        frame = tb.Frame(about_win)
-        frame.grid(row=0, column=0, sticky="nsew")
-        frame.columnconfigure(0, weight=1)
-        frame.rowconfigure(0, weight=1)
-
-        # Logo centrado
-        try:
-            logo_path = os.path.join(os.path.dirname(__file__), "img/logo.png")
-            img = Image.open(logo_path)
-            img = img.resize((128, 128), Image.LANCZOS)
-            logo = ImageTk.PhotoImage(img)
-            logo_label = tb.Label(frame, image=logo)
-            logo_label.image = logo
-            logo_label.grid(row=0, column=0, pady=(30, 10), sticky="n")
-        except Exception:
-            logo_label = tb.Label(frame, text="[Logo]")
-            logo_label.grid(row=0, column=0, pady=(30, 10), sticky="n")
-
-        # Descripción centrada
-        desc = "XDownloader es una aplicación de escritorio para descargar contenido multimedia de X.com (antes Twitter) de forma sencilla y moderna. Permite pegar varias URLs, elegir carpeta de destino, gestionar historial y cambiar el tema visual."
-        desc_label = tb.Label(frame, text=desc, wraplength=350, justify="center")
-        desc_label.grid(row=1, column=0, pady=(10, 20), sticky="n")
-
-        # Botón para abrir el repositorio
-        def open_repo():
-            webbrowser.open_new("https://github.com/sapoclay/descargax/tree/main")
-        repo_btn = tb.Button(frame, text="Ver repositorio en GitHub", bootstyle="info", command=open_repo)
-        repo_btn.grid(row=2, column=0, pady=(10, 30), sticky="n")
-
-        # Estado
         self.status_label = tb.Label(self.root, text=f"Carpeta: {self.config['download_folder']}", anchor="w")
         self.status_label.grid(row=3, column=0, sticky="ew", padx=10, pady=5)
 
@@ -144,9 +104,8 @@ class XDownloaderApp:
 
         msg = f"{success} descarga(s) completada(s), {failed} fallida(s)"
         self.status_label.config(text=msg)
-        notification.notify(title="XDownloader", message=msg)
+        notification.notify(title="DescargaX", message=msg)
 
-        # Preguntar si se quiere reproducir
         if downloaded_files:
             answer = messagebox.askyesno("Reproducir", f"¿Deseas reproducir el último archivo descargado?\n\n{os.path.basename(downloaded_files[-1])}")
             if answer:
@@ -168,7 +127,6 @@ class XDownloaderApp:
     def log_history(self, url):
         with open(HISTORIAL_FILE, "a", encoding="utf-8") as f:
             f.write(f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')} - {url}\n")
-
 
     def show_history(self):
         if not os.path.exists(HISTORIAL_FILE):
@@ -199,6 +157,7 @@ class XDownloaderApp:
                 box.text.tag_add(url, start, end)
 
         box.text.config(state="disabled")
+        self.add_context_menu(box.text)
 
     def redownload_from_history(self, event):
         widget = event.widget
@@ -249,7 +208,21 @@ class XDownloaderApp:
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(self.config, f, indent=2)
 
+    def add_context_menu(self, widget):
+        popup = tb.Menu(widget, tearoff=0)
+        popup.add_command(label="Cortar", command=lambda: widget.event_generate("<<Cut>>"))
+        popup.add_command(label="Copiar", command=lambda: widget.event_generate("<<Copy>>"))
+        popup.add_command(label="Pegar", command=lambda: widget.event_generate("<<Paste>>"))
+        widget.bind("<Button-3>", lambda e: self._show_popup(e, popup))
+        widget.bind("<Button-2>", lambda e: self._show_popup(e, popup))
+
+    def _show_popup(self, event, popup):
+        try:
+            popup.tk_popup(event.x_root, event.y_root)
+        finally:
+            popup.grab_release()
+
 if __name__ == "__main__":
     root = tb.Window(themename="flatly")
-    app = XDownloaderApp(root)
+    app = DescargaXApp(root)
     root.mainloop()
