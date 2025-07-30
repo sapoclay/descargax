@@ -1,3 +1,27 @@
+"""
+DescargaXApp
+============
+Aplicación de escritorio multiplataforma para descargar contenido multimedia de X.com (antes Twitter) 
+usando una interfaz gráfica basada en ttkbootstrap.
+
+Características principales:
+- Permite pegar varias URLs de X.com para descargar videos e imágenes.
+- Selección de carpeta de destino.
+- Historial de descargas y opción de re-descargar.
+- Cambio de tema visual claro/oscuro.
+- Notificaciones de escritorio.
+- Ventana "Acerca de" con información y acceso al repositorio.
+
+Dependencias:
+- Python 3.8+
+- ttkbootstrap
+- yt-dlp
+- plyer
+- Pillow (opcional para mostrar logo)
+
+Uso:
+Ejecuta el archivo para abrir la interfaz gráfica. Requiere tener las dependencias instaladas.
+"""
 import os
 import json
 import threading

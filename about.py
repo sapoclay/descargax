@@ -1,3 +1,23 @@
+"""
+about.py
+========
+Módulo para mostrar la ventana "Acerca de DescargaX".
+
+Características:
+- Ventana modal con información sobre la aplicación, logo, descripción y botones de acción.
+- Controla que solo se abra una instancia de la ventana About.
+- Permite acceder al repositorio en GitHub y cerrar la ventana.
+
+Dependencias:
+- ttkbootstrap
+- Pillow (PIL)
+- webbrowser
+- tkinter.scrolledtext
+
+Uso:
+Llama a show_about(parent) desde la app principal para mostrar la ventana About.
+"""
+
 import os
 import webbrowser
 import ttkbootstrap as tb
@@ -81,6 +101,6 @@ def show_about(parent):
     btn_close = tb.Button(
         btn_frame,
         text="Cerrar",
-        command=on_close  # ahora usa el mismo handler que limpia la instancia
+        command=on_close 
     )
     btn_close.pack(side="right", padx=10)
